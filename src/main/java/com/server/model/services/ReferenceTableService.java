@@ -2,14 +2,18 @@ package com.server.model.services;
 
 import com.server.model.entities.CarBodyTypeEntity;
 import com.server.model.entities.ModelEntity;
+import com.server.model.entities.Role;
 import com.server.model.entities.UserEntity;
 import com.server.model.repositories.CarBodyTypeRepository;
 import com.server.model.repositories.ModelRepository;
 import com.server.model.repositories.UserRepository;
+import jdk.internal.dynalink.support.NameCodec;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -17,7 +21,7 @@ import java.util.List;
 public class ReferenceTableService {
     private final CarBodyTypeRepository cbtRepository;
     private final ModelRepository modelRepository;
-    public final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public void saveBodyType(CarBodyTypeEntity cbtEntity) {
         cbtRepository.save(cbtEntity);
@@ -27,10 +31,6 @@ public class ReferenceTableService {
         modelRepository.save(modelEntity);
     }
 
-    public void saveUser(UserEntity userEntity) {
-        userRepository.save(userEntity);
-    }
-
 
     public List<CarBodyTypeEntity> getAllBodyTypes() {
         return cbtRepository.findAll();
@@ -38,10 +38,6 @@ public class ReferenceTableService {
 
     public List<ModelEntity> getAllModels() {
         return modelRepository.findAll();
-    }
-
-    public List<UserEntity> getAllUsers() {
-        return userRepository.findAll();
     }
 
 
@@ -55,11 +51,6 @@ public class ReferenceTableService {
                 modelRepository.findById(id).get() : null;
     }
 
-    public UserEntity getUser(Integer id) {
-        return userRepository.findById(id).isPresent() ?
-                userRepository.findById(id).get() : null;
-    }
-
 
     public void deleteBodyType(Integer id) {
         cbtRepository.deleteById(id);
@@ -69,10 +60,6 @@ public class ReferenceTableService {
         modelRepository.deleteById(id);
     }
 
-    public void deleteUser(Integer id) {
-        userRepository.deleteById(id);
-    }
-
 
     public Boolean existBodyType(CarBodyTypeEntity carBodyTypeEntity) {
         return cbtRepository.exists(Example.of(carBodyTypeEntity));
@@ -80,10 +67,6 @@ public class ReferenceTableService {
 
     public Boolean existModel(ModelEntity modelEntity) {
         return modelRepository.exists(Example.of(modelEntity));
-    }
-
-    public Boolean existUser(UserEntity userEntity) {
-        return userRepository.exists(Example.of(userEntity));
     }
 
 
@@ -100,17 +83,6 @@ public class ReferenceTableService {
             if (entity.getModelName().equals(modelName)
                     && entity.getEngineCapacity().equals(engineCapacity)
                     && entity.getEnginePower().equals(enginePower))
-                return entity.getId();
-        }
-        return null;
-    }
-
-    public Integer getUserId(String userName) {
-        String[] fullNameAr = userName.trim().split(" ");
-        for (UserEntity entity : getAllUsers()) {
-            if (entity.getFirstName().equals(fullNameAr[0])
-                    && entity.getLastName().equals(fullNameAr[1])
-                    && entity.getIsManager())
                 return entity.getId();
         }
         return null;

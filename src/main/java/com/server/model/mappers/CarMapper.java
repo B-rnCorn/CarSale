@@ -3,6 +3,7 @@ package com.server.model.mappers;
 import com.server.model.dto.CarDto;
 import com.server.model.entities.CarEntity;
 import com.server.model.services.ReferenceTableService;
+import com.server.model.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CarMapper {
     private final ReferenceTableService refTableService;
+    private final UserService userService;
 
     // From entity to dto
     public List<CarDto> mapAllToDto(List<Object[]> objectsList) {
@@ -62,7 +64,7 @@ public class CarMapper {
                     .setMileage(dto.getMileage())
                     .setColor(dto.getColor())
                     .setPrice(dto.getPrice())
-                    .setManagerId(refTableService.getUserId(dto.getManager()))
+                    .setManagerId(userService.getUserId(dto.getManager()))
                     .setCustomerId(dto.getCustomerId());
             if (dto.getId() != null)
                 entity.setId(dto.getId());

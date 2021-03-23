@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface CarRepository extends JpaRepository<CarEntity, Integer> {
 
-    @Query(value ="select c.id, m.brand_name, m.model_name, c.vin," +
+    @Query(value ="select c.id, m.brand_name, m.model_name, c.vin, " +
                     "c.year, c.mileage, m.engine_capacity, m.engine_power, " +
                     "m.type, c.color, c.price, " +
                     "mgr.first_name || ' ' || mgr.last_name as manager, " +
