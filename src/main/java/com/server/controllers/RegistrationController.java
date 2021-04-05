@@ -16,13 +16,13 @@ public class RegistrationController {
 
     private final UserService userService;
 
-    @GetMapping("/dealership/registration")
+    @GetMapping("/registration")
     public String registration()
     {
         return "registration";
     }
 
-    @PostMapping("/dealership/registration")
+    @PostMapping("/registration")
     public ResponseEntity<String> createUser(@RequestBody UserEntity userEntity) {
         if (userEntity != null) {
             userService.createUser(userEntity);

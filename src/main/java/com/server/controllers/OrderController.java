@@ -13,10 +13,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
-    private final static String BASE_CATALOG = "/dealership/payments";
 
-    @RequestMapping(value = BASE_CATALOG, method = {RequestMethod.POST, RequestMethod.PUT})
-    public ResponseEntity<?> save(@RequestBody OrderEntity payment){
+    @RequestMapping(value = "/payments", method = {RequestMethod.POST, RequestMethod.PUT})
+    public ResponseEntity<Void> save(@RequestBody OrderEntity payment){
         if (payment != null) {
             orderService.save(payment);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -24,7 +23,7 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @GetMapping(value = BASE_CATALOG)
+    @GetMapping(value = "/payments")
     public ResponseEntity<List<OrderEntity>> read(){
         List<OrderEntity> payments = orderService.getAll();
         return !(payments == null || payments.isEmpty()) ?
@@ -32,7 +31,7 @@ public class OrderController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = BASE_CATALOG, params = {"id"})
+    @GetMapping(value = "/payments", params = {"id"})
     public ResponseEntity<OrderEntity> read(@RequestParam(name = "id") int id) {
         OrderEntity payment = orderService.get(id);
         return payment != null ?
@@ -40,8 +39,8 @@ public class OrderController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping(value = BASE_CATALOG, params = {"id"})
-    public ResponseEntity<?> delete(@RequestParam(name = "id") int id){
+    @DeleteMapping(value = "/payments", params = {"id"})
+    public ResponseEntity<Void> delete(@RequestParam(name = "id") int id){
         OrderEntity payment = orderService.get(id);
         orderService.delete(id);
         return !orderService.exist(payment) ?

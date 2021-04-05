@@ -16,10 +16,8 @@ import java.util.List;
 public class CarController {
     private final CarService carService;
     private final CarMapper carMapper;
-    private final static String BASE_CATALOG = "/dealership/cars";
-
-    @RequestMapping(value = BASE_CATALOG, method = {RequestMethod.POST, RequestMethod.PUT})
-    public ResponseEntity<?> save(@RequestBody CarDto carDto) {
+    @RequestMapping(value = "/cars", method = {RequestMethod.POST, RequestMethod.PUT})
+    public ResponseEntity<Void> save(@RequestBody CarDto carDto) {
         CarEntity carEntity = carMapper.mapToEntity(carDto);
         if(carEntity != null){
             carService.save(carEntity);
@@ -29,7 +27,7 @@ public class CarController {
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @GetMapping(value = BASE_CATALOG)
+    @GetMapping(value = "/cars")
     public ResponseEntity<List<CarDto>> read(){
         List<CarDto> carDtos = carMapper.mapAllToDto(carService.joinCars());
 
@@ -38,7 +36,7 @@ public class CarController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = BASE_CATALOG, params = {"id"})
+    @GetMapping(value = "/cars", params = {"id"})
     public ResponseEntity<CarDto> read(@RequestParam(name = "id") int id){
         CarDto carDto = carMapper.mapToDto(carService.joinCar(id));
 
@@ -46,8 +44,8 @@ public class CarController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping(value = BASE_CATALOG, params = {"id"})
-    public ResponseEntity<?> delete(@RequestParam(name = "id") int id) {
+    @DeleteMapping(value = "/cars", params = {"id"})
+    public ResponseEntity<Void> delete(@RequestParam(name = "id") int id) {
         CarEntity carEntity = carService.get(id);
         if (carService.exist(carEntity)) {
             carService.deleteById(id);
