@@ -15,35 +15,31 @@ import java.util.Collection;
 
 @Component
 @RequiredArgsConstructor
-public class AuthProvider implements AuthenticationProvider
-{
-    private final UserService userService;
+public class AuthProvider implements AuthenticationProvider {
+
+    private final UserDetailsServiceImpl userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException
-    {
+
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String email = authentication.getName();
         String password = (String) authentication.getCredentials();
 
-        UserEntity user = (UserEntity) userService.loadUserByEmail(email);
+        UserEntity user = (UserEntity) userDetailsService.loadUserByUsername(email);
 
-        if(user != null && user.getUsername().equals(email))
-        {
-            if(!passwordEncoder.matches(password, user.getPassword()))
-            {
+        if (user != null && user.getUsername().equals(email)) {
+            if (!passwordEncoder.matches(password, user.getPassword())) {
                 throw new BadCredentialsException("Wrong password");
             }
 
             Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 
             return new UsernamePasswordAuthenticationToken(user, password, authorities);
-        }
-        else
+        } else
             throw new BadCredentialsException("Username not found");
     }
 
-    public boolean supports(Class<?> arg)
-    {
+    public boolean supports(Class<?> arg) {
         return true;
     }
 }

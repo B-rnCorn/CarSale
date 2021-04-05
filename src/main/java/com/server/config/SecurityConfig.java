@@ -1,6 +1,7 @@
 package com.server.config;
 
 import com.server.model.services.AuthProvider;
+import com.server.model.services.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,30 +16,29 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final AuthProvider authProvider;
+
+    private final UserDetailsServiceImpl userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder;
-    }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf()
+                .disable();
+
         http
                 .authorizeRequests()
-                .antMatchers("/resources/**", "/dealership/",
-                        "/dealership/login**", "/dealership/registration").permitAll()
+                .antMatchers("/resources/**", "/",
+                        "/login**", "/registration", "/dealership/cars").permitAll()
                 .anyRequest().authenticated()
-                .and().formLogin().loginPage("/dealership/login")
-                .defaultSuccessUrl("/dealership/").failureUrl("/dealership/login?error").permitAll()
-                .and().logout().logoutSuccessUrl("/dealership/").permitAll();
+                .and().formLogin().loginPage("/login")
+                .defaultSuccessUrl("/").failureUrl("/login?error").permitAll()
+                .and().logout().logoutSuccessUrl("/").permitAll();
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth)
-    {
-        auth.authenticationProvider(authProvider);
+    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 }
