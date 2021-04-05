@@ -3,7 +3,6 @@ package com.server.model.services;
 import com.server.model.entities.Role;
 import com.server.model.entities.UserEntity;
 import com.server.model.repositories.UserRepository;
-import jdk.internal.dynalink.support.NameCodec;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     public final UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public void saveUser(UserEntity userEntity) {
         userRepository.save(userEntity);
@@ -56,9 +55,5 @@ public class UserService {
         return null;
 
         //return userRepository.findByFirstNameAndLastName(fullNameAr[0], fullNameAr[1]);
-    }
-
-    public UserEntity loadUserByEmail(String email){
-        return userRepository.findByEmail(email);
     }
 }

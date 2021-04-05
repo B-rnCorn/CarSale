@@ -2,18 +2,12 @@ package com.server.model.services;
 
 import com.server.model.entities.CarBodyTypeEntity;
 import com.server.model.entities.ModelEntity;
-import com.server.model.entities.Role;
-import com.server.model.entities.UserEntity;
 import com.server.model.repositories.CarBodyTypeRepository;
 import com.server.model.repositories.ModelRepository;
-import com.server.model.repositories.UserRepository;
-import jdk.internal.dynalink.support.NameCodec;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -21,7 +15,6 @@ import java.util.List;
 public class ReferenceTableService {
     private final CarBodyTypeRepository cbtRepository;
     private final ModelRepository modelRepository;
-    private final PasswordEncoder passwordEncoder;
 
     public void saveBodyType(CarBodyTypeEntity cbtEntity) {
         cbtRepository.save(cbtEntity);
