@@ -42,10 +42,9 @@ public class CarMapper {
                     .setEnginePower(Float.parseFloat(objects[7].toString()))
                     .setBodyType((String) objects[8])
                     .setColor((String) objects[9])
-                    .setPrice((Integer) objects[10])
-                    .setManager((String) objects[11]);
-            if (objects[12] != null)
-                    dto.setCustomerId(Integer.parseInt((objects[12]).toString()));
+                    .setPrice((Integer) objects[10]);
+            if (objects[11] != null)
+                    dto.setCustomerId(Integer.parseInt((objects[11]).toString()));
         }
         return dto;
     }
@@ -64,7 +63,6 @@ public class CarMapper {
                     .setMileage(dto.getMileage())
                     .setColor(dto.getColor())
                     .setPrice(dto.getPrice())
-                    .setManagerId(userService.getUserId(dto.getManager()))
                     .setCustomerId(dto.getCustomerId());
             if (dto.getId() != null)
                 entity.setId(dto.getId());

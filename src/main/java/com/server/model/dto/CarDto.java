@@ -17,6 +17,5 @@ public class CarDto {
     private String bodyType;
     private String color;
     private Integer price;
-    private String manager;
     private Integer customerId;
 }
