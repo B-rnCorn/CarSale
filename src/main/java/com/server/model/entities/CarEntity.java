@@ -37,9 +37,6 @@ public class CarEntity {
     @Column(name = "price")
     private Integer price;
 
-    @Column(name = "manager_id")
-    private Integer managerId;
-
     @Column(name = "customer_id")
     private Integer customerId;
 }
