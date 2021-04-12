@@ -20,7 +20,6 @@ public interface CarRepository extends JpaRepository<CarEntity, Integer> {
                                     "join brands on models.brand_id = brands.id " +
                                     "join car_body_types as cbt on models.body_type_id = cbt.id) as m " +
                         "on c.model_id = m.id " +
-                    "where c.customer_id is null " +
                     "order by id",
             nativeQuery = true)
     List<Object[]> joinCar();

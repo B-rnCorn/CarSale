@@ -16,20 +16,17 @@ import java.util.List;
 public class CarController {
     private final CarService carService;
     private final CarMapper carMapper;
+
     @RequestMapping(value = "/cars", method = {RequestMethod.POST, RequestMethod.PUT})
     public ResponseEntity<Void> save(@RequestBody CarDto carDto) {
-        CarEntity carEntity = carMapper.mapToEntity(carDto);
-        if(carEntity != null){
-            carService.save(carEntity);
-            if (carEntity.equals(carService.get(carEntity.getId())))
-                return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        return carService.saveCarDto(carDto) ?
+                new ResponseEntity<>(HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     @GetMapping(value = "/cars")
-    public ResponseEntity<List<CarDto>> read(){
-        List<CarDto> carDtos = carMapper.mapAllToDto(carService.joinCars());
+    public ResponseEntity<List<CarDto>> read() {
+        List<CarDto> carDtos = carService.getAllCarsOnSale();
 
         return !(carDtos == null || carDtos.isEmpty()) ?
                 new ResponseEntity<>(carDtos, HttpStatus.OK)
@@ -37,8 +34,8 @@ public class CarController {
     }
 
     @GetMapping(value = "/cars", params = {"id"})
-    public ResponseEntity<CarDto> read(@RequestParam(name = "id") int id){
-        CarDto carDto = carMapper.mapToDto(carService.joinCar(id));
+    public ResponseEntity<CarDto> read(@RequestParam(name = "id") int id) {
+        CarDto carDto = carService.getCarDto(id);
 
         return carDto != null ? new ResponseEntity<>(carDto, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -24,17 +24,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf()
                 .disable();
 
-        http
-                .authorizeRequests()
+        http.authorizeRequests()
+                .antMatchers( "/login**", "/registration", "/news", "/cars").permitAll()
+                .anyRequest().authenticated();
 
-                .antMatchers("/resources/**", "/login**",
-                        "/registration", "/news", "/cars").permitAll()
+        http.formLogin()
+                .loginPage("/login")
+                .failureUrl("/login?error")
+                .permitAll();
 
-                .anyRequest().authenticated()
-                .and().formLogin().loginPage("/login")
+        http.logout()
+                .permitAll()
+                .logoutUrl("/logout")
+                .invalidateHttpSession(true);
 
-                .failureUrl("/login?error").permitAll()
-                .and().logout().permitAll();
+
     }
 
     @Override

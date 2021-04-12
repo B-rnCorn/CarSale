@@ -1,12 +1,14 @@
 package com.server.controllers;
 
 import com.server.model.entities.OrderEntity;
+import com.server.model.entities.UserEntity;
 import com.server.model.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -14,24 +16,24 @@ import java.util.List;
 public class OrderController {
     private final OrderService orderService;
 
-    @RequestMapping(value = "/payments", method = {RequestMethod.POST, RequestMethod.PUT})
-    public ResponseEntity<Void> save(@RequestBody OrderEntity payment){
-        if (payment != null) {
-            orderService.save(payment);
+    @PostMapping(value = "/orders")
+    public ResponseEntity<Void> save(@RequestBody OrderEntity order){
+        if (order != null) {
+            orderService.save(order);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @GetMapping(value = "/payments")
+    @GetMapping(value = "/orders")
     public ResponseEntity<List<OrderEntity>> read(){
-        List<OrderEntity> payments = orderService.getAll();
-        return !(payments == null || payments.isEmpty()) ?
-                new ResponseEntity<>(payments, HttpStatus.OK)
+        List<OrderEntity> orders = orderService.getAll();
+        return !(orders == null || orders.isEmpty()) ?
+                new ResponseEntity<>(orders, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = "/payments", params = {"id"})
+    @GetMapping(value = "/orders", params = {"id"})
     public ResponseEntity<OrderEntity> read(@RequestParam(name = "id") int id) {
         OrderEntity payment = orderService.get(id);
         return payment != null ?
@@ -39,7 +41,7 @@ public class OrderController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping(value = "/payments", params = {"id"})
+    @DeleteMapping(value = "/orders", params = {"id"})
     public ResponseEntity<Void> delete(@RequestParam(name = "id") int id){
         OrderEntity payment = orderService.get(id);
         orderService.delete(id);
