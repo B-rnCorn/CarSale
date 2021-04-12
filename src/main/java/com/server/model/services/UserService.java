@@ -21,11 +21,15 @@ public class UserService {
         userRepository.save(userEntity);
     }
 
-    public void createUser(UserEntity userEntity) {
-        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
-        userEntity.setActive(true);
-        userEntity.setRoles(Collections.singleton(Role.USER));
-        userRepository.save(userEntity);
+    public boolean createUser(UserEntity user) {
+        UserEntity userFromDB = userRepository.findByEmail(user.getEmail());
+        if(userFromDB != null) return false;
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setActive(true);
+        user.setRoles(Collections.singleton(Role.USER));
+        userRepository.save(user);
+        return true;
     }
 
     public UserEntity getUser(Integer id) {
@@ -43,17 +47,5 @@ public class UserService {
 
     public void deleteUser(Integer id) {
         userRepository.deleteById(id);
-    }
-
-    public Integer getUserId(String fullName) {
-        String[] fullNameAr = fullName.trim().split(" ");
-        for (UserEntity entity : getAllUsers()) {
-            if (entity.getFirstName().equals(fullNameAr[0])
-                    && entity.getLastName().equals(fullNameAr[1]))
-                return entity.getId();
-        }
-        return null;
-
-        //return userRepository.findByFirstNameAndLastName(fullNameAr[0], fullNameAr[1]);
     }
 }

@@ -24,8 +24,7 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public ResponseEntity<Void> createUser(@RequestBody UserEntity userEntity) {
-        if (userEntity != null) {
-            userService.createUser(userEntity);
+        if (userEntity != null && userService.createUser(userEntity)) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
