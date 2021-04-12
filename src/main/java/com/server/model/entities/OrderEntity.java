@@ -2,12 +2,16 @@ package com.server.model.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
+@Accessors(chain = true)
 @Entity
 @Table(name = "orders")
 public class OrderEntity {
@@ -24,8 +28,14 @@ public class OrderEntity {
     private Byte statusId;
 
     @Column(name = "date")
-    private Date date;
+    private Timestamp date;
 
     @Column(name = "grand_total")
     private Integer grandTotal;
+
+    @ManyToMany
+    @JoinTable(name = "order_items",
+            joinColumns = @JoinColumn(name = "order_id", referencedColumnName="id"),
+            inverseJoinColumns = @JoinColumn(name = "car_id", referencedColumnName = "id"))
+    private Set<CarEntity> cars;
 }
