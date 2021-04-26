@@ -1,14 +1,12 @@
 package com.server.controllers;
 
 import com.server.model.entities.OrderEntity;
-import com.server.model.entities.UserEntity;
 import com.server.model.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController
